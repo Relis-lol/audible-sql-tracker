@@ -18,7 +18,9 @@
   </ul>
 
   <h2>📥 Download</h2>
-  <p><a href="hoerbuecher.db" download>➡️ hoerbuecher.db herunterladen</a></p>
+<a href="https://github.com/Relis-lol/audible-sql-tracker/raw/main/hoerbuecher.db" download>
+  ➡️ hoerbuecher.db herunterladen
+</a>
 
   <h2>ℹ️ Hinweise</h2>
   <p>Einfach mit <code>SQLiteStudio</code> oder einem beliebigen SQL-Tool öffnen. Die DB ist normalisiert und analysierbar per SQL-Abfrage.</p>
