@@ -1,25 +1,26 @@
-# Audible SQL Tracker
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Audible SQL Tracker</title>
+</head>
+<body style="font-family:sans-serif; padding:2rem; max-width:700px; margin:auto;">
+  <h1>🎧 Audible SQL Tracker</h1>
+  <p>Diese SQLite-Datenbank enthält strukturierte Informationen zu über 5 Jahren persönlicher Hörbuchkäufe via Audible und BookBeat.</p>
 
-This project allows users to analyze Audible audiobook purchases using SQL.  
-The included `.sql` file defines a normalized schema and optional example data for import.
+  <h2>📂 Enthaltene Daten</h2>
+  <ul>
+    <li>Buchtitel</li>
+    <li>Kaufdatum</li>
+    <li>Preis (€) oder Guthaben</li>
+    <li>Quelle (z. B. Audible, BookBeat)</li>
+    <li>Bonus-Guthaben und effektiver Stückpreis</li>
+  </ul>
 
-## Use Case
+  <h2>📥 Download</h2>
+  <p><a href="hoerbuecher.db" download>➡️ hoerbuecher.db herunterladen</a></p>
 
-- Track audiobook purchases across months
-- Monitor credit vs. direct purchases
-- Calculate effective price per title
-- Identify trends (price spikes, bonus credits, etc.)
-
-## Files
-
-- `audible_tracker.sql` – SQLite schema and optional sample data
-- `index.html` – Simple static page with download link
-
-## Download / Demo
-
-🔽 [Click here to download the SQL file](audible_tracker.sql)
-
----
-
-Project is standalone and does not require any additional tooling.  
-For showcase purposes (e.g. LinkedIn portfolio).
+  <h2>ℹ️ Hinweise</h2>
+  <p>Einfach mit <code>SQLiteStudio</code> oder einem beliebigen SQL-Tool öffnen. Die DB ist normalisiert und analysierbar per SQL-Abfrage.</p>
+</body>
+</html>
