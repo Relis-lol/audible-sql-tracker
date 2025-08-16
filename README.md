@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-<title>Audible SQL Tracker</title>
 </head>
 <body style="font-family:sans-serif; padding:2rem; max-width:700px; margin:auto;">
   <h1>🎧 Audible SQL Tracker</h1>
