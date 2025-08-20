@@ -25,3 +25,7 @@
   <p>Simply open the file with <code>SQLiteStudio</code> or any SQL tool. The database is normalized and ready for SQL analysis.</p>
 </body>
 </html>
+
+---
+
+**Developed by Relis – 2025**
