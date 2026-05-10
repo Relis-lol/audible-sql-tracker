@@ -45,9 +45,24 @@ FROM (
 Shows how many Audible titles were bought with credits or cash.
 
 ```sql
-SELECT typ, COUNT(*) AS total_titles
+SELECT 
+    CASE
+        WHEN typ IS NULL OR TRIM(typ) = ''
+        THEN 'Other'
+        ELSE typ
+    END AS typ,
+    
+    COUNT(*) AS total_titles
+
 FROM audible_audiobooks
-GROUP BY typ
+
+GROUP BY
+    CASE
+        WHEN typ IS NULL OR TRIM(typ) = ''
+        THEN 'Unknown'
+        ELSE typ
+    END
+
 ORDER BY total_titles DESC;
 ```
 
@@ -78,11 +93,14 @@ LIMIT 20;
 ## 5. Audible purchases per year
 
 ```sql
-SELECT strftime('%Y', purchase_date) AS year,
-       COUNT(*) AS audible_titles
+SELECT 
+    strftime('%Y', purchase_date) AS year,
+    COUNT(*) AS audible_titles
 FROM audible_audiobooks
+WHERE purchase_date IS NOT NULL
+  AND purchase_date LIKE '20__-__-__'
 GROUP BY year
-ORDER BY year;
+ORDER BY year DESC;
 ```
 
 ---
@@ -90,11 +108,14 @@ ORDER BY year;
 ## 6. BookBeat listens per year
 
 ```sql
-SELECT strftime('%Y', listen_date) AS year,
-       COUNT(*) AS bookbeat_titles
+SELECT 
+    strftime('%Y', listen_date) AS year,
+    COUNT(*) AS bookbeat_titles
 FROM bookbeat_audiobooks
+WHERE listen_date IS NOT NULL
+  AND listen_date LIKE '20__-__-__'
 GROUP BY year
-ORDER BY year;
+ORDER BY year DESC;
 ```
 
 ---
@@ -102,11 +123,14 @@ ORDER BY year;
 ## 7. Audible purchases per month
 
 ```sql
-SELECT strftime('%Y-%m', purchase_date) AS month,
-       COUNT(*) AS audible_titles
+SELECT 
+    strftime('%Y-%m', purchase_date) AS month,
+    COUNT(*) AS audible_titles
 FROM audible_audiobooks
+WHERE purchase_date IS NOT NULL
+  AND purchase_date LIKE '20__-__-__'
 GROUP BY month
-ORDER BY month;
+ORDER BY month DESC;
 ```
 
 ---
@@ -114,11 +138,25 @@ ORDER BY month;
 ## 8. BookBeat listens per month
 
 ```sql
-SELECT strftime('%Y-%m', listen_date) AS month,
-       COUNT(*) AS bookbeat_titles
+SELECT
+    SUBSTR(purchase_date, 1, 4) AS year,
+    COUNT(*) AS total_titles
+FROM audible_audiobooks
+WHERE purchase_date IS NOT NULL
+  AND purchase_date LIKE '20__-__-__'
+GROUP BY year
+
+UNION ALL
+
+SELECT
+    SUBSTR(listen_date, 1, 4) AS year,
+    COUNT(*) AS total_titles
 FROM bookbeat_audiobooks
-GROUP BY month
-ORDER BY month;
+WHERE listen_date IS NOT NULL
+  AND listen_date LIKE '20__-__-__'
+GROUP BY year
+
+ORDER BY year;
 ```
 
 ---
@@ -128,18 +166,27 @@ ORDER BY month;
 Combines Audible purchases and BookBeat listens into one monthly overview.
 
 ```sql
-SELECT month, source, COUNT(*) AS total_titles
-FROM (
-    SELECT strftime('%Y-%m', purchase_date) AS month, 'Audible' AS source
-    FROM audible_audiobooks
-
-    UNION ALL
-
-    SELECT strftime('%Y-%m', listen_date) AS month, 'BookBeat' AS source
-    FROM bookbeat_audiobooks
-)
+SELECT
+    SUBSTR(purchase_date, 1, 7) AS month,
+    source,
+    COUNT(*) AS total_titles
+FROM audible_audiobooks
+WHERE purchase_date IS NOT NULL
+  AND purchase_date LIKE '20__-__-__'
 GROUP BY month, source
-ORDER BY month, source;
+
+UNION ALL
+
+SELECT
+    SUBSTR(listen_date, 1, 7) AS month,
+    source,
+    COUNT(*) AS total_titles
+FROM bookbeat_audiobooks
+WHERE listen_date IS NOT NULL
+  AND listen_date LIKE '20__-__-__'
+GROUP BY month, source
+
+ORDER BY month;
 ```
 
 ---
@@ -192,10 +239,9 @@ ORDER BY date, title;
 
 ---
 
-## 12. Search titles by possible series name
+## 12. Search for books from the same series
 
-There is no separate `series` column in the database, so this searches inside the title text.
-Replace `Lumera` with any series keyword.
+Example: Find all books related to the "Lumera" series.
 
 ```sql
 SELECT source, title, author, date
@@ -342,6 +388,9 @@ FROM (
     SELECT source, title, author, listen_date AS date
     FROM bookbeat_audiobooks
 )
+WHERE title IS NOT NULL
+  AND TRIM(title) <> ''
+  AND date LIKE '20__-__-__'
 ORDER BY date DESC
 LIMIT 25;
 ```
